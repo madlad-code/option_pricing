@@ -27,10 +27,10 @@ Justera konfigurationsparametrar, såsom riskfri ränta, volatilitet och antal s
 Projektstruktur
 
 - main.py: Huvudfil för att köra simuleringarna.
-- black_scholes.py: Innehåller funktioner för Black-Scholes-modellen.
-- monte_carlo.py: Innehåller funktioner för Monte Carlo-simuleringar.
-- data_analysis.py: Verktyg för att analysera historisk aktiedata.
-- config.py: Konfigurationsfil med inställningar och parametrar.
+- **black_scholes.py:** Innehåller funktioner för Black-Scholes-modellen.
+- **monte_carlo.py:** Innehåller funktioner för Monte Carlo-simuleringar.
+- **data_analysis.py:** Verktyg för att analysera historisk aktiedata.
+- **config.py:** Konfigurationsfil med inställningar och parametrar.
 
 För frågor kontakta mig via mejl:
 Oscarenghag@gmail.com
