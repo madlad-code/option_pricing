@@ -24,9 +24,8 @@ python main.py
 
 Justera konfigurationsparametrar, såsom riskfri ränta, volatilitet och antal simuleringar, i filen config.py.
 
-Projektstruktur
-
-- main.py: Huvudfil för att köra simuleringarna.
+## Projektstruktur
+- **main.py:** Huvudfil för att köra simuleringarna.
 - **black_scholes.py:** Innehåller funktioner för Black-Scholes-modellen.
 - **monte_carlo.py:** Innehåller funktioner för Monte Carlo-simuleringar.
 - **data_analysis.py:** Verktyg för att analysera historisk aktiedata.
