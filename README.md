@@ -11,7 +11,7 @@ Detta projekt syftar till att utveckla en modell för prissättning av aktiemark
 ## Installation
 1. Klona repot:
    ```bash
-   git clone https://github.com/ditt-anvandarnamn/option-prissattning.git
+   git clone https://github.com/your_username/option_pricing.git
 2. navigera in i projektmappen:
    cd option_pricing
 3. Installera nödvändiga bibliotek:
