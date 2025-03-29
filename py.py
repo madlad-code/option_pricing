@@ -1,1 +1,1 @@
-print("quant mf")
+print("quansaf")
