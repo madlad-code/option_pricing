@@ -23,23 +23,26 @@ class BlackScholesModel:
         option_price: Price of the option
         greeks: Dictionary containing the Greeks
         """
-        # Calculate d1 and d2
+        # d1 representerar den riskneutrala sannolikheten för att optionen förfaller i pengarna (justerad för konvexitet)
+        # d2 är d1 justerad för volatilitet över tid
         d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
         d2 = d1 - sigma * np.sqrt(T)
         
-        # Calculate option price based on type
+        # Beräkna optionspris baserat på typ (Call/Put)
         if option_type.lower() == 'call':
+            # Pris = (Väntat värde av aktien) - (Diskonterat lösenpris)
             option_price = S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
-            # Calculate Greeks for call options
-            delta = norm.cdf(d1)
-            gamma = norm.pdf(d1) / (S * sigma * np.sqrt(T))
-            theta = -(S * sigma * norm.pdf(d1)) / (2 * np.sqrt(T)) - r * K * np.exp(-r * T) * norm.cdf(d2)
-            vega = S * np.sqrt(T) * norm.pdf(d1)
-            rho = K * T * np.exp(-r * T) * norm.cdf(d2)
+            # Beräkna Grekerna för köpoptioner
+            delta = norm.cdf(d1)  # Sannolikhetsviktad exponering mot underliggande
+            gamma = norm.pdf(d1) / (S * sigma * np.sqrt(T)) # Deltas känslighet mot prisändringar
+            theta = -(S * sigma * norm.pdf(d1)) / (2 * np.sqrt(T)) - r * K * np.exp(-r * T) * norm.cdf(d2) # Tidsvärdesminskning
+            vega = S * np.sqrt(T) * norm.pdf(d1) # Känslighet mot volatilitet
+            rho = K * T * np.exp(-r * T) * norm.cdf(d2) # Känslighet mot ränteförändringar
             
         elif option_type.lower() == 'put':
+            # Säljoptionens pris via Put-Call paritet
             option_price = K * np.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
-            # Calculate Greeks for put options
+            # Beräkna Grekerna för säljoptioner
             delta = norm.cdf(d1) - 1
             gamma = norm.pdf(d1) / (S * sigma * np.sqrt(T))
             theta = -(S * sigma * norm.pdf(d1)) / (2 * np.sqrt(T)) + r * K * np.exp(-r * T) * norm.cdf(-d2)

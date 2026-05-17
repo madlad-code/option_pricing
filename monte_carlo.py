@@ -32,19 +32,20 @@ class MonteCarloModel:
         if seed is not None:
             np.random.seed(seed)
         
-        # Generate random normal returns
+        # Generera slumpmässiga normalfördelade chocker (Z) för prisbanan
         Z = np.random.standard_normal(num_simulations)
         
-        # Calculate final stock prices
+        # Beräkna slutpris via Geometric Brownian Motion (GBM)
+        # Formel: S * exp((r - 0.5*sigma^2)*T + sigma*sqrt(T)*Z)
         ST = S * np.exp((r - 0.5 * sigma**2) * T + sigma * np.sqrt(T) * Z)
         
-        # Calculate payoffs at expiration
+        # Beräkna avkastning (payoff) vid slutdatum
         if option_type.lower() == 'call':
             payoffs = np.maximum(ST - K, 0)
         else:  # put
             payoffs = np.maximum(K - ST, 0)
             
-        # Discount payoffs to present value
+        # Diskontera förväntad avkastning till nuvärde
         discount_factor = np.exp(-r * T)
         discounted_payoffs = payoffs * discount_factor
         

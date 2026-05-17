@@ -30,38 +30,38 @@ class BinomialTreeModel:
         # Time step
         dt = T / N
         
-        # Up and down factors
+        # Upp- och nergångsfaktorer (u och d) baserat på volatilitet
         u = np.exp(sigma * np.sqrt(dt))
         d = 1 / u
         
-        # Risk-neutral probability
+        # Riskneutral sannolikhet (p) för en uppgång
         p = (np.exp(r * dt) - d) / (u - d)
         
-        # Initialize stock price tree
+        # Initiera träd för aktiepriser
         stock_tree = np.zeros((N+1, N+1))
         
-        # Fill in the stock price tree
+        # Fyll trädet framåt i tiden med möjliga aktiepriser
         for i in range(N+1):
             for j in range(i+1):
                 stock_tree[j, i] = S * (u ** (i-j)) * (d ** j)
         
-        # Initialize option value tree
+        # Initiera träd för optionsvärden
         option_tree = np.zeros((N+1, N+1))
         
-        # Fill in the option values at expiration (time step N)
+        # Beräkna optionsvärdet vid förfall (steg N) - "intrinsic value"
         for j in range(N+1):
             if option_type.lower() == 'call':
                 option_tree[j, N] = max(0, stock_tree[j, N] - K)
             else:  # put
                 option_tree[j, N] = max(0, K - stock_tree[j, N])
         
-        # Work backwards through the tree
+        # Arbeta bakåt genom trädet (Bakåtuppräkning / Backward Induction)
         for i in range(N-1, -1, -1):
             for j in range(i+1):
-                # Calculate discounted expected option value
+                # Beräkna diskonterat väntevärde från nästa tidssteg
                 option_value = np.exp(-r * dt) * (p * option_tree[j, i+1] + (1-p) * option_tree[j+1, i+1])
                 
-                # Check for early exercise if American option
+                # Om Amerikansk option: kontrollera om tidig inlösen är lönsammare
                 if american:
                     if option_type.lower() == 'call':
                         intrinsic_value = max(0, stock_tree[j, i] - K)
