@@ -80,6 +80,50 @@ class MonteCarloModel:
         Monte Carlo pricing for binary (digital) options
         
         Parameters:
-        S: Current stock price
-        K: Strike price
-        T: Time to maturity in years
+        S, K, T, r, sigma: Standard option parameters
+        num_simulations: Number of simulations
+        option_type: 'call' or 'put'
+        
+        Returns:
+        option_price: Price of the binary option (pays $1 if in-the-money)
+        """
+        Z = np.random.standard_normal(num_simulations)
+        ST = S * np.exp((r - 0.5 * sigma**2) * T + sigma * np.sqrt(T) * Z)
+        
+        if option_type.lower() == 'call':
+            payoffs = np.where(ST > K, 1.0, 0.0)
+        else:
+            payoffs = np.where(ST < K, 1.0, 0.0)
+            
+        return np.mean(payoffs) * np.exp(-r * T)
+
+    def plot_simulated_paths(self, price_paths, T, K, option_type='call'):
+        """Plot the simulated price paths"""
+        num_steps = price_paths.shape[1] - 1
+        time_axis = np.linspace(0, T, num_steps + 1)
+        
+        plt.figure(figsize=(12, 6))
+        for i in range(price_paths.shape[0]):
+            plt.plot(time_axis, price_paths[i, :], lw=1, alpha=0.6)
+            
+        plt.axhline(y=K, color='r', linestyle='--', label=f'Strike Price (K=${K})')
+        plt.title(f'Monte Carlo Simulation: {price_paths.shape[0]} Price Paths')
+        plt.xlabel('Time to Maturity (Years)')
+        plt.ylabel('Stock Price ($)')
+        plt.grid(True, alpha=0.3)
+        plt.legend()
+        
+        return plt.gcf()
+
+if __name__ == "__main__":
+    mc_model = MonteCarloModel()
+    S, K, T, r, sigma = 100, 100, 1.0, 0.05, 0.2
+    
+    price, ci, paths = mc_model.price_option(S, K, T, r, sigma, num_simulations=10000, paths=True, seed=42)
+    
+    print(f"Monte Carlo Price: ${price:.4f}")
+    print(f"95% Confidence Interval: (${ci[0]:.4f}, ${ci[1]:.4f})")
+    
+    fig = mc_model.plot_simulated_paths(paths, T, K)
+    fig.savefig('monte_carlo_paths.png')
+    print("Paths plot saved as 'monte_carlo_paths.png'")

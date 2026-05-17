@@ -1,108 +1,50 @@
 # Optionsprissättning i Python
 
-Detta projekt innehåller en samling Python-program för optionsprissättning med olika metoder. Koden implementerar flera prissättningsmodeller och inkluderar verktyg för visualisering av optionsbeteende och riskparametrar.
+Ett kraftfullt verktyg för prissättning av optioner med Black-Scholes, Binomialträd och Monte Carlo-simuleringar. Projektet inkluderar en interaktiv Jupyter-dashboard för realtidsanalys.
 
-## Modeller
+## Innehåll
 
-### Black-Scholes-modellen
-En grundläggande modell för optionsprissättning som ger en stängd formel för europeiska optioner. Modellen beräknar:
-- Optionspriser baserat på konstant volatilitet
-- Grekerna (delta, gamma, theta, vega, rho) för riskhantering
-
-### Binomialträdsmodell
-En diskret modell som är särskilt användbar för:
-- Amerikansk optionsprissättning med möjlighet till tidig inlösen
-- Flexibel hantering av volatilitet vid olika noder
-- Tydlig visualisering av möjliga prisbanor
-
-### Monte Carlo-simulering
-Metod som använder slumpmässig provtagning för att uppskatta optionspriser:
-- Lämpar sig för komplexa stigberoende optioner
-- Kan hantera flera underliggande tillgångar
-- Genererar konfidensintervall för prisuppskattningar
-
-### Stokastiska volatilitetsmodeller (Heston)
-En avancerad modell som hanterar varierande volatilitet genom att:
-- Modellera volatilitet som en egen stokastisk process
-- Fånga marknadsegenskaper som volatilitetskluster
-- Integrera parametrar för mean reversion och långsiktig varians
-
-### SABR-modellen
-En modell populär på räntederivatmarknader som:
-- Direkt modellerar volatilitetskurvan (smile/skew)
-- Inkluderar CEV-parameter och volatilitet av volatilitet
-- Bättre fångar marknadsobserverade mönster
+- **`black_scholes.py`**: Analytisk prissättning av europeiska optioner samt beräkning av Grekerna (Delta, Gamma, Theta, Vega, Rho).
+- **`binomial.py`**: Diskret prissättning för både europeiska och amerikanska optioner med visualisering av beslutsträd.
+- **`monte_carlo.py`**: Stokastisk simulering av prisbanor för europeiska och binära optioner.
+- **`OptionPricingDashboard.ipynb`**: Interaktiv dashboard byggd med `ipywidgets`.
 
 ## Installation
 
-```bash
-# Klona repository
-git clone https://github.com/användarnamn/option-pricing-python.git
-cd option-pricing-python
-
-# Skapa virtuell miljö
-python -m venv venv
-source venv/bin/activate  # På Windows: venv\Scripts\activate
-
-# Installera paket
-pip install numpy scipy matplotlib pandas networkx
-```
-
-## Användning
-
-Kör modellerna individuellt:
+Först, se till att du har Python installerat. Installera sedan nödvändiga bibliotek:
 
 ```bash
-python black_scholes_model.py
-python binomial_tree_model.py
-python monte_carlo_model.py
+pip install numpy scipy matplotlib networkx ipywidgets jupyterlab
 ```
 
-Eller importera i egna program:
+## Interaktiv Dashboard (Rekommenderas)
 
-```python
-from black_scholes_model import BlackScholesModel
+För den bästa upplevelsen, använd den inbyggda dashboarden. Den låter dig justera parametrar som volatilitet och tid i realtid och se hur de påverkar priser och riskparametrar direkt.
 
-# Skapa modellinstans
-bs_model = BlackScholesModel()
+1. Starta Jupyter Lab:
+   ```bash
+   jupyter lab
+   ```
+2. Öppna `OptionPricingDashboard.ipynb`.
+3. Kör alla celler (`Run > Run All Cells`).
 
-# Sätt parametrar
-S = 100      # Aktiepris
-K = 100      # Lösenpris
-T = 1.0      # Tid till förfall
-r = 0.05     # Riskfri ränta
-sigma = 0.2  # Volatilitet
+## Användning av skript
 
-# Beräkna pris och greker
-call_price, call_greeks = bs_model.price_option(S, K, T, r, sigma, 'call')
-print(f"Köpoptionspris: ${call_price:.4f}")
+Du kan även köra varje modell som fristående skript för att se exempel och generera grafer:
+
+```bash
+python black_scholes.py
+python binomial.py
+python monte_carlo.py
 ```
 
-## Visualiseringar
+## Matematiska Koncept
 
-Projektet inkluderar verktyg för att visualisera:
-- Optionspriser vid olika nivåer
-- Grekernas beteende över tid
-- Volatilitetsytor
-- Binomialträd och Monte Carlo-prisbanor
-
-## Avancerade funktioner
-
-- Implicit volatilitetsberäkning
-- Amerikansk optionsvärdering
-- Exotiska optioner
-- Stokastisk volatilitetsmodellering
-- Känslighetsanalys för parametrar
-
-## Bidrag
-
-Bidrag välkomnas! För att bidra:
-1. Forka repositoryt
-2. Skapa en funktionsgren
-3. Committa ändringar
-4. Pusha till din gren
-5. Skapa en Pull Request
+- **Geometric Brownian Motion (GBM)**: Grunden för Monte Carlo och Black-Scholes.
+- **Risk-Neutral Valuation**: Teorin bakom arbitragefri prissättning.
+- **Greeks**: Känslighetsanalys för riskhantering.
+- **Backwards Induction**: Används i binomialträdet för att värdera amerikanska optioner.
 
 ## Licens
 
-Projektet använder MIT-licens. Se LICENSE-filen för detaljer.
+MIT
